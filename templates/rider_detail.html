@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="card">
+    <h2>Rider R{{ rider.rider_id }}</h2>
+    <p><strong>City:</strong> {{ rider.city }} | <strong>Signup:</strong> {{ rider.signup_channel }} | <strong>Status:</strong> {{ rider.status }}</p>
+    <p><strong>Created:</strong> {{ rider.created_at }}</p>
+    {% if risk_snapshot %}
+    <p>
+        <strong>Current Fraud Type:</strong> {{ risk_snapshot.fraud_type }} |
+        <strong>Risk:</strong> {{ risk_snapshot.risk_score }} |
+        <strong>Priority:</strong> {{ risk_snapshot.priority_score }} |
+        <strong>Est. Loss:</strong> {{ risk_snapshot.estimated_loss }}
+    </p>
+    {% else %}
+    <p>No current alert snapshot for this rider.</p>
+    {% endif %}
+</section>
+
+<section class="grid-2">
+    <article class="card">
+        <h3>Devices</h3>
+        <table>
+            <thead>
+                <tr><th>ID</th><th>Rooted</th><th>First Seen</th><th>Last Seen</th></tr>
+            </thead>
+            <tbody>
+                {% for d in devices %}
+                <tr>
+                    <td>{{ d.device_id }}</td>
+                    <td>{{ d.rooted_flag }}</td>
+                    <td>{{ d.first_seen_ts }}</td>
+                    <td>{{ d.last_seen_ts }}</td>
+                </tr>
+                {% else %}
+                <tr><td colspan="4">No devices</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </article>
+
+    <article class="card">
+        <h3>Recent Refunds</h3>
+        <table>
+            <thead>
+                <tr><th>Refund</th><th>Amount</th><th>Reason</th><th>Time</th></tr>
+            </thead>
+            <tbody>
+                {% for r in refunds %}
+                <tr>
+                    <td>{{ r.refund_id }}</td>
+                    <td>{{ r.amount }}</td>
+                    <td>{{ r.reason }}</td>
+                    <td>{{ r.ts }}</td>
+                </tr>
+                {% else %}
+                <tr><td colspan="4">No refunds</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </article>
+</section>
+
+<section class="grid-2">
+    <article class="card">
+        <h3>Recent Trips</h3>
+        <table>
+            <thead>
+                <tr><th>Trip</th><th>Fare</th><th>Promo</th><th>Distance</th><th>Status</th></tr>
+            </thead>
+            <tbody>
+                {% for t in trips %}
+                <tr>
+                    <td>{{ t.trip_id }}</td>
+                    <td>{{ t.fare }}</td>
+                    <td>{{ t.promo_amount }}</td>
+                    <td>{{ t.distance_km }}</td>
+                    <td>{{ t.status }}</td>
+                </tr>
+                {% else %}
+                <tr><td colspan="5">No trips</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </article>
+    <article class="card">
+        <h3>Recent Payments</h3>
+        <table>
+            <thead>
+                <tr><th>Payment</th><th>Amount</th><th>Method</th><th>Success</th><th>Chargeback</th></tr>
+            </thead>
+            <tbody>
+                {% for p in payments %}
+                <tr>
+                    <td>{{ p.payment_id }}</td>
+                    <td>{{ p.amount }}</td>
+                    <td>{{ p.method }}</td>
+                    <td>{{ p.success }}</td>
+                    <td>{{ p.chargeback_flag }}</td>
+                </tr>
+                {% else %}
+                <tr><td colspan="5">No payments</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </article>
+</section>
+
+<section class="card">
+    <h3>Analyst Decision History</h3>
+    <table>
+        <thead>
+            <tr><th>Action ID</th><th>Alert</th><th>Analyst</th><th>Action</th><th>Outcome</th><th>Notes</th><th>Time</th></tr>
+        </thead>
+        <tbody>
+            {% for a in actions %}
+            <tr>
+                <td>{{ a.action_id }}</td>
+                <td>{{ a.alert_id }}</td>
+                <td>{{ a.analyst_id }}</td>
+                <td>{{ a.action }}</td>
+                <td>{{ a.outcome_label }}</td>
+                <td>{{ a.notes }}</td>
+                <td>{{ a.action_ts }}</td>
+            </tr>
+            {% else %}
+            <tr><td colspan="7">No analyst actions yet for this rider.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</section>
+{% endblock %}

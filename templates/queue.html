@@ -1,0 +1,175 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="hero card">
+    <div>
+        <p class="eyebrow">Internal Risk Operations</p>
+        <h2>Rider Fraud Command Center</h2>
+        <p class="subtext">Prioritize alerts by blended risk + financial impact and take action quickly.</p>
+    </div>
+    <div class="hero-chip">Live Queue</div>
+</section>
+
+<section class="summary-grid">
+    <article class="card metric-card">
+        <h3>Total Alerts (30d)</h3>
+        <p class="metric-value">{{ "{:,}".format(summary.total_alerts or 0) }}</p>
+        <p class="metric-caption">Riders currently in the fraud queue.</p>
+    </article>
+    <article class="card metric-card">
+        <h3>High-Risk Alerts</h3>
+        <p class="metric-value">{{ "{:,}".format(headline.high_risk_alerts or 0) }}</p>
+        <p class="metric-caption">Alerts with rider risk score ≥ 80.</p>
+    </article>
+    <article class="card metric-card">
+        <h3>Loss Exposure (PKR)</h3>
+        <p class="metric-value">{{ "{:,.2f}".format(summary.est_loss or 0) }}</p>
+        <p class="metric-caption">Potential financial loss if all alerts are true fraud.</p>
+    </article>
+    <article class="card metric-card">
+        <h3>Blocked Riders</h3>
+        <p class="metric-value">{{ "{:,}".format(headline.blocked_riders or 0) }}</p>
+        <p class="metric-caption">Riders currently in a blocked state.</p>
+    </article>
+</section>
+
+<section class="card trend-grid">
+    <article>
+        <h3>Alert Volume by Severity</h3>
+        <div class="severity-bar">
+            <div class="severity-segment high" style="width: {{ severity.high_pct }}%"></div>
+            <div class="severity-segment medium" style="width: {{ severity.medium_pct }}%"></div>
+            <div class="severity-segment low" style="width: {{ severity.low_pct }}%"></div>
+        </div>
+        <div class="legend">
+            <span class="pill pill-high">High · {{ severity.high_count }}</span>
+            <span class="pill pill-medium">Medium · {{ severity.medium_count }}</span>
+            <span class="pill pill-low">Low · {{ severity.low_count }}</span>
+        </div>
+    </article>
+    <article>
+        <h3>Top Fraud Types by Alert Count</h3>
+        <ul class="fraud-type-list">
+            {% for row in fraud_type_mix %}
+            <li>
+                <span class="fraud-label">{{ row.fraud_type }}</span>
+                <div class="fraud-bar-wrap">
+                    <div class="fraud-bar" style="width: {{ row.pct }}%"></div>
+                </div>
+                <span class="fraud-count">{{ row.cnt }}</span>
+            </li>
+            {% endfor %}
+        </ul>
+    </article>
+</section>
+
+<section class="card">
+    <h2>Alert Filters</h2>
+    <form method="get" class="filters">
+        <label>
+            Min Risk
+            <input type="number" name="min_risk" value="{{ filters.min_risk }}" min="0" max="100">
+        </label>
+        <label>
+            Fraud Type
+            <select name="fraud_type">
+                <option value="">All</option>
+                {% for ft in fraud_types %}
+                <option value="{{ ft.fraud_type }}" {% if filters.fraud_type == ft.fraud_type %}selected{% endif %}>
+                    {{ ft.fraud_type }}
+                </option>
+                {% endfor %}
+            </select>
+        </label>
+        <label>
+            City
+            <select name="city">
+                <option value="">All</option>
+                {% for c in cities %}
+                <option value="{{ c.city }}" {% if filters.city == c.city %}selected{% endif %}>
+                    {{ c.city }}
+                </option>
+                {% endfor %}
+            </select>
+        </label>
+        <label>
+            Status
+            <select name="status">
+                <option value="">All</option>
+                {% for s in ['open', 'monitor', 'blocked', 'closed'] %}
+                <option value="{{ s }}" {% if filters.status == s %}selected{% endif %}>{{ s }}</option>
+                {% endfor %}
+            </select>
+        </label>
+        <button type="submit">Apply</button>
+    </form>
+</section>
+
+<section class="card">
+    <h2>Prioritized Alert Queue</h2>
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>Alert ID</th>
+                    <th>Rider</th>
+                    <th>City</th>
+                    <th>Severity</th>
+                    <th>Fraud Type</th>
+                    <th>Risk</th>
+                    <th>Est. Loss</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for a in alerts %}
+                <tr>
+                    <td>#{{ a.alert_id }}</td>
+                    <td><a href="{{ url_for('rider_detail', rider_id=a.rider_id) }}">R{{ a.rider_id }}</a></td>
+                    <td>{{ a.city }}</td>
+                    <td>
+                        {% if a.risk_score >= 80 %}
+                        <span class="pill pill-high">High</span>
+                        {% elif a.risk_score >= 60 %}
+                        <span class="pill pill-medium">Medium</span>
+                        {% else %}
+                        <span class="pill pill-low">Low</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ a.fraud_type }}</td>
+                    <td>{{ "{:.1f}".format(a.risk_score) }}%</td>
+                    <td>{{ "{:,.2f}".format(a.estimated_loss) }}</td>
+                    <td>
+                        <span class="status {{ a.status }}">{{ a.status }}</span>
+                    </td>
+                    <td>
+                        <form method="post" action="{{ url_for('take_action', alert_id=a.alert_id) }}" class="action-form">
+                            <input name="notes" type="text" placeholder="Notes">
+                            <div class="action-inline">
+                                <select name="action">
+                                    <option value="monitor">monitor</option>
+                                    <option value="temporary_block">temporary_block</option>
+                                    <option value="escalate">escalate</option>
+                                    <option value="allow">allow</option>
+                                </select>
+                                <select name="outcome">
+                                    <option value="pending_review">pending_review</option>
+                                    <option value="confirmed_fraud">confirmed_fraud</option>
+                                    <option value="false_positive">false_positive</option>
+                                </select>
+                                <input name="analyst" type="text" placeholder="Analyst" required>
+                                <button type="submit">Save</button>
+                            </div>
+                        </form>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="8">No alerts match current filters.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+{% endblock %}

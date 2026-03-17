@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Rider Details (Static Demo)</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="container">
+      <h1>Rider Fraud Alert Dashboard (Static Demo)</h1>
+      <nav>
+        <a href="index.html">Alert Queue</a>
+        <a href="actions.html">Analyst Actions</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="card">
+      <h2 id="riderName">Rider</h2>
+      <p id="riderMeta"></p>
+      <p id="riderCreated"></p>
+      <p><strong id="riskLine"></strong></p>
+    </section>
+
+    <section class="grid-2">
+      <article class="card">
+        <h3>Devices</h3>
+        <table>
+          <thead><tr><th>ID</th><th>Rooted</th><th>First Seen</th><th>Last Seen</th></tr></thead>
+          <tbody id="devicesBody"></tbody>
+        </table>
+      </article>
+
+      <article class="card">
+        <h3>Recent Refunds</h3>
+        <table>
+          <thead><tr><th>Refund</th><th>Amount</th><th>Reason</th><th>Time</th></tr></thead>
+          <tbody id="refundsBody"></tbody>
+        </table>
+      </article>
+    </section>
+
+    <section class="grid-2">
+      <article class="card">
+        <h3>Recent Trips</h3>
+        <table>
+          <thead><tr><th>Trip</th><th>Fare</th><th>Promo</th><th>Distance</th><th>Status</th></tr></thead>
+          <tbody id="tripsBody"></tbody>
+        </table>
+      </article>
+
+      <article class="card">
+        <h3>Recent Payments</h3>
+        <table>
+          <thead><tr><th>Payment</th><th>Amount</th><th>Method</th><th>Success</th><th>Chargeback</th></tr></thead>
+          <tbody id="paymentsBody"></tbody>
+        </table>
+      </article>
+    </section>
+
+    <section class="card">
+      <h3>Analyst Decision History</h3>
+      <table>
+        <thead><tr><th>Action ID</th><th>Alert</th><th>Analyst</th><th>Action</th><th>Outcome</th><th>Notes</th><th>Time</th></tr></thead>
+        <tbody id="actionsBody"></tbody>
+      </table>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>

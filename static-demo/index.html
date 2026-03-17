@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Rider Fraud Dashboard (Static Demo)</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="container">
+      <h1>Rider Fraud Alert Dashboard (Static Demo)</h1>
+      <nav>
+        <a href="index.html">Alert Queue</a>
+        <a href="actions.html">Analyst Actions</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero card">
+      <div>
+        <p class="eyebrow">Internal Risk Operations</p>
+        <h2>Rider Fraud Command Center</h2>
+        <p class="subtext">Live Server demo. Data is simulated and saved in browser localStorage.</p>
+      </div>
+      <div class="hero-chip">Static Demo</div>
+    </section>
+
+    <section class="summary-grid">
+      <article class="card metric-card">
+        <h3>Total Alerts (30d)</h3>
+        <p class="metric-value" id="totalAlerts">0</p>
+        <p class="metric-caption">Riders currently in the fraud queue.</p>
+      </article>
+      <article class="card metric-card">
+        <h3>High-Risk Alerts</h3>
+        <p class="metric-value" id="highRiskCount">0</p>
+        <p class="metric-caption">Alerts with rider risk score ≥ 80.</p>
+      </article>
+      <article class="card metric-card">
+        <h3>Loss Exposure (PKR)</h3>
+        <p class="metric-value" id="estLoss">0</p>
+        <p class="metric-caption">Potential loss if all alerts are true fraud.</p>
+      </article>
+      <article class="card metric-card">
+        <h3>Blocked Riders</h3>
+        <p class="metric-value" id="blockedCount">0</p>
+        <p class="metric-caption">Riders currently in a blocked state.</p>
+      </article>
+    </section>
+
+    <section class="card trend-grid">
+      <article>
+        <h3>Alert Volume by Severity</h3>
+        <div class="severity-bar">
+          <div class="severity-segment high" id="sevHigh"></div>
+          <div class="severity-segment medium" id="sevMed"></div>
+          <div class="severity-segment low" id="sevLow"></div>
+        </div>
+        <div class="legend" id="sevLegend"></div>
+      </article>
+      <article>
+        <h3>Top Fraud Types by Alert Count</h3>
+        <ul class="fraud-type-list" id="fraudTypeList"></ul>
+      </article>
+    </section>
+
+    <section class="card">
+      <h2>Alert Filters</h2>
+      <div class="filters">
+        <label>
+          Min Risk
+          <input id="minRisk" type="number" min="0" max="100" value="35">
+        </label>
+        <label>
+          Fraud Type
+          <select id="fraudType">
+            <option value="">All</option>
+            <option value="promo_abuse">promo_abuse</option>
+            <option value="payment_fraud">payment_fraud</option>
+            <option value="refund_abuse">refund_abuse</option>
+            <option value="account_takeover">account_takeover</option>
+            <option value="location_spoofing">location_spoofing</option>
+          </select>
+        </label>
+        <label>
+          City
+          <select id="city">
+            <option value="">All</option>
+            <option value="Karachi">Karachi</option>
+            <option value="Lahore">Lahore</option>
+            <option value="Islamabad">Islamabad</option>
+            <option value="Rawalpindi">Rawalpindi</option>
+          </select>
+        </label>
+        <label>
+          Status
+          <select id="status">
+            <option value="">All</option>
+            <option value="open">open</option>
+            <option value="monitor">monitor</option>
+            <option value="blocked">blocked</option>
+            <option value="closed">closed</option>
+          </select>
+        </label>
+        <div style="display:flex; gap:8px; align-items:flex-end;">
+          <button id="applyFilters" type="button">Apply</button>
+          <button id="resetDemo" type="button">Reset Demo</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Prioritized Alert Queue</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Alert ID</th>
+              <th>Rider</th>
+              <th>City</th>
+              <th>Severity</th>
+              <th>Fraud Type</th>
+              <th>Risk</th>
+              <th>Est. Loss</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="alerts-tbody"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>

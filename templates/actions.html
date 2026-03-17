@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="card">
+    <h2>Analyst Actions Log</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Action ID</th>
+                <th>Alert ID</th>
+                <th>Rider</th>
+                <th>Fraud Type</th>
+                <th>Analyst</th>
+                <th>Action</th>
+                <th>Outcome</th>
+                <th>Notes</th>
+                <th>Time</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for r in records %}
+            <tr>
+                <td>{{ r.action_id }}</td>
+                <td>{{ r.alert_id if r.alert_id else "-" }}</td>
+                <td>
+                    {% if r.rider_id %}
+                    <a href="{{ url_for('rider_detail', rider_id=r.rider_id) }}">R{{ r.rider_id }}</a>
+                    {% else %}
+                    -
+                    {% endif %}
+                </td>
+                <td>{{ r.fraud_type if r.fraud_type else "-" }}</td>
+                <td>{{ r.analyst_id }}</td>
+                <td>{{ r.action }}</td>
+                <td>{{ r.outcome_label }}</td>
+                <td>{{ r.notes }}</td>
+                <td>{{ r.action_ts }}</td>
+            </tr>
+            {% else %}
+            <tr><td colspan="9">No actions yet.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</section>
+{% endblock %}
