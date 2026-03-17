@@ -4,6 +4,8 @@ MVP product-ops dashboard for rider fraud triage using Python, SQL, HTML, and CS
 
 **Live demo:** [https://moeedfarrukh.github.io/rider-fraud-alert-dashboard/](https://moeedfarrukh.github.io/rider-fraud-alert-dashboard/)
 
+**Product strategy & roadmap:** [PRODUCT_STRATEGY_AND_ROADMAP.md](PRODUCT_STRATEGY_AND_ROADMAP.md)
+
 ## What this app does
 
 - Generates synthetic rider, trip, payment, login, and refund data
