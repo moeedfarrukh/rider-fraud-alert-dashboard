@@ -2,6 +2,8 @@
 
 MVP product-ops dashboard for rider fraud triage using Python, SQL, HTML, and CSS.
 
+**Live demo:** [https://moeedfarrukh.github.io/rider-fraud-alert-dashboard/](https://moeedfarrukh.github.io/rider-fraud-alert-dashboard/)
+
 ## What this app does
 
 - Generates synthetic rider, trip, payment, login, and refund data
@@ -53,6 +55,18 @@ Notes:
 - This demo uses hardcoded sample data.
 - Queue actions are saved in browser `localStorage`.
 - Use the `Reset Demo` button on `index.html` to restore defaults.
+
+## Deploy to GitHub Pages
+
+The `docs/` folder contains the static demo configured for GitHub Pages:
+
+1. Push your repo to GitHub.
+2. Go to **Settings** → **Pages**.
+3. Under **Build and deployment** → **Source**, select **Deploy from a branch**.
+4. Choose your default branch (e.g. `main`) and set **Folder** to `/docs`.
+5. Click **Save**. The dashboard will be live at `https://<username>.github.io/rider-fraud-alert-dashboard/`.
+
+GitHub Pages serves only static files (no Python/Flask). The `docs/` version uses the same UI with client-side JavaScript and `localStorage`.
 
 ## PM metrics you can derive from this dataset
 

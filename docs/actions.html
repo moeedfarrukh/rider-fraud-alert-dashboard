@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Analyst Actions - Rider Fraud Dashboard</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="container">
+      <h1>Rider Fraud Alert Prioritization Dashboard</h1>
+      <nav>
+        <a href="index.html">Alert Queue</a>
+        <a href="actions.html">Analyst Actions</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="card">
+      <p class="muted">This page shows actions you save from the alert queue.</p>
+    </section>
+    <section class="card">
+      <h2>Analyst Actions Log</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Action ID</th>
+            <th>Alert ID</th>
+            <th>Rider</th>
+            <th>Fraud Type</th>
+            <th>Analyst</th>
+            <th>Action</th>
+            <th>Outcome</th>
+            <th>Notes</th>
+            <th>Time</th>
+          </tr>
+        </thead>
+        <tbody id="actionsLogBody"></tbody>
+      </table>
+    </section>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>
